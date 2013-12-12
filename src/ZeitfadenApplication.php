@@ -82,7 +82,6 @@ class ZeitfadenApplication
 		$this->mySqlProfiler = $this->dependencyManager->get('SqlProfiler');
 		$this->phpProfiler = $this->dependencyManager->get('PhpProfiler');
 
-o						
 		
 	}
 
