@@ -70,15 +70,19 @@ class ZeitfadenApplication
     $this->dependencyConfigurator->configureDependencies($this->dependencyManager,$this);
 
 
+    if ($this->configurationServiceName !== false)
+    {
+      $this->configLoader->setConfigurationService( $this->dependencyManager->get($this->configurationServiceName) );
+    }
 
-    $this->configLoader->setConfigurationService( $this->dependencyManager->get($this->configurationServiceName) );
+
 		$this->configLoader->loadConfiguration($this->httpHost,$this->applicationId, $this->config);
     
     
 		$this->mySqlProfiler = $this->dependencyManager->get('SqlProfiler');
 		$this->phpProfiler = $this->dependencyManager->get('PhpProfiler');
 
-						
+o						
 		
 	}
 
