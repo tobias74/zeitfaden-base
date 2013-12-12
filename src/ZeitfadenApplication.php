@@ -19,6 +19,9 @@ class ZeitfadenApplication
 	{
 	  $this->httpHost = $configData['httpHost'];
     $this->dependencyConfigurator = $configData['dependencyConfigurator'];
+    $this->configLoader = $configData['configLoader'];
+    $this->configurationServiceName = $configData['configurationServiceName'];
+
     
 		switch ($this->httpHost)
     {
@@ -61,14 +64,15 @@ class ZeitfadenApplication
 		$this->dependencyManager = SL\DependencyManager::getInstance();
 		$this->dependencyManager->setProfilerName('PhpProfiler');
 
+    $this->config = $this->configLoader->getNewConfigInstance();
+
 
     $this->dependencyConfigurator->configureDependencies($this->dependencyManager,$this);
 
 
-    
-    $this->config = $this->dependencyManager->get('ZeitfadenConfig');
-    $this->config->performConfiguration($this->httpHost,$this->applicationId);
-		
+
+    $this->configLoader->setConfigurationService( $this->dependencyManager->get($this->configurationServiceName) );
+		$this->configLoader->loadConfiguration($this->httpHost,$this->applicationId, $this->config);
     
     
 		$this->mySqlProfiler = $this->dependencyManager->get('SqlProfiler');
@@ -77,7 +81,12 @@ class ZeitfadenApplication
 						
 		
 	}
-	
+
+  public function getConfig()
+  {
+    return $this->config;
+  }
+
 	public function getApplicationId()
   {
     return $this->applicationId;
