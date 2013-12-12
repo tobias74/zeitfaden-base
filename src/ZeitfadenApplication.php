@@ -176,7 +176,10 @@ class ZeitfadenApplication
         
         $frontController = new \PivoleUndPavoli\FrontController($this);
         $frontController->setDependencyManager($this->dependencyManager);
+
+        $frontController->dispatch($request,$response);
         
+        /*
         try
         {
             $frontController->dispatch($request,$response);
@@ -189,6 +192,8 @@ class ZeitfadenApplication
         {
             die($e->getMessage());
         }
+        */
+
         
         $appTimer->stop();
         

@@ -12,6 +12,12 @@ class ZeitfadenShardingService
   {
     $this->applicationId = $val;
   }
+
+  public function getApplicationId()
+  {
+    return $this->applicationId;
+  }
+
     public function getDebugName()
     {
       return "HttpBasedShardingService";
