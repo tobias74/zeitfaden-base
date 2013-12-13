@@ -21,6 +21,9 @@ class ZeitfadenApplication
     $this->dependencyConfigurator = $configData['dependencyConfigurator'];
     $this->configLoader = $configData['configLoader'];
     $this->configurationServiceName = $configData['configurationServiceName'];
+    $this->applicationIni = $configData['applicationIni'];
+    print_r($this->applicationIni);
+    die();
 
     
 		switch ($this->httpHost)
@@ -30,17 +33,17 @@ class ZeitfadenApplication
       case "test.db-shard-one.zeitfaden.com":
       case "test.db-shard-two.zeitfaden.com":
       case "test.db-shard-three.zeitfaden.com":
-        $this->applicationId = 'zeitfaden_test';
-        $this->facebookAppId = '516646775013909';
-        $this->facebookAppSecret = 'b565442b784941eec855edcf4228bf58';
+        $this->applicationId = $this->applicationIni['test']['application_id'];
+        $this->facebookAppId = $this->applicationIni['test']['facebook_app_id'];
+        $this->facebookAppSecret = $this->applicationIni['test']['facebook_app_secret'];
         break;
   
       case "www.zeitfaden.de":
       case "www.zeitfaden.com":
         die('in application, no live yet.');
-        $this->applicationId = 'zeitfaden_live';
-        $this->facebookAppId = '516646775013909';
-        $this->facebookAppSecret = 'b565442b784941eec855edcf4228bf58';
+        $this->applicationId = $this->applicationIni['live']['application_id'];
+        $this->facebookAppId = $this->applicationIni['live']['facebook_app_id'];
+        $this->facebookAppSecret = $this->applicationIni['live']['facebook_app_secret'];
         break;
         
       case "livetest.zeitfaden.com":
@@ -48,9 +51,9 @@ class ZeitfadenApplication
       case "livetest.db-shard-one.zeitfaden.com":
       case "livetest.db-shard-two.zeitfaden.com":
       case "livetest.db-shard-three.zeitfaden.com":
-        $this->applicationId = 'zeitfaden_live';
-        $this->facebookAppId = '516646775013909';
-        $this->facebookAppSecret = 'b565442b784941eec855edcf4228bf58';
+        $this->applicationId = $this->applicationIni['live']['application_id'];
+        $this->facebookAppId = $this->applicationIni['live']['facebook_app_id'];
+        $this->facebookAppSecret = $this->applicationIni['live']['facebook_app_secret'];
         break;
         
       default:
