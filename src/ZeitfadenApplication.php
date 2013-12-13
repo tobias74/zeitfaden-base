@@ -22,8 +22,6 @@ class ZeitfadenApplication
     $this->configLoader = $configData['configLoader'];
     $this->configurationServiceName = $configData['configurationServiceName'];
     $this->applicationIni = $configData['applicationIni'];
-    print_r($this->applicationIni);
-    die();
 
     
 		switch ($this->httpHost)
