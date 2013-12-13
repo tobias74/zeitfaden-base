@@ -93,7 +93,7 @@ abstract class AbstractZeitfadenController
       if (!isset($gridFile->file['metadata']['type']))
       {
         //$this->_response->addHeader('Content-type: image/png');
-        $this->_Response->addHeader('Content-Disposition: attachment');
+        $this->_response->addHeader('Content-Disposition: attachment');
       }
       else
       {
