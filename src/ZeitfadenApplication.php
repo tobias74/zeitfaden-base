@@ -38,7 +38,9 @@ class ZeitfadenApplication
   
       case "www.zeitfaden.de":
       case "www.zeitfaden.com":
-        die('in application, no live yet.');
+      case "live.db-shard-one.zeitfaden.com":
+      case "live.db-shard-two.zeitfaden.com":
+      case "live.db-shard-three.zeitfaden.com":
         $this->applicationId = $this->applicationIni['live']['application_id'];
         $this->facebookAppId = $this->applicationIni['live']['facebook_app_id'];
         $this->facebookAppSecret = $this->applicationIni['live']['facebook_app_secret'];
