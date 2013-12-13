@@ -49,9 +49,9 @@ class ZeitfadenApplication
       case "livetest.db-shard-one.zeitfaden.com":
       case "livetest.db-shard-two.zeitfaden.com":
       case "livetest.db-shard-three.zeitfaden.com":
-        $this->applicationId = $this->applicationIni['live']['application_id'];
-        $this->facebookAppId = $this->applicationIni['live']['facebook_app_id'];
-        $this->facebookAppSecret = $this->applicationIni['live']['facebook_app_secret'];
+        $this->applicationId = $this->applicationIni['livetest']['application_id'];
+        $this->facebookAppId = $this->applicationIni['livetest']['facebook_app_id'];
+        $this->facebookAppSecret = $this->applicationIni['livetest']['facebook_app_secret'];
         break;
         
       default:
