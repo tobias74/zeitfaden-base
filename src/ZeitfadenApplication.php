@@ -211,11 +211,11 @@ class ZeitfadenApplication
         $response->addHeader("ZeitfadenProfiler: ".$profilerJson);
         
         
-        $response->appendValue('loginId', $loggedInUser->getId());
-        $response->appendValue('loginEmail', $loggedInUser->getEmail());
-        $response->appendValue('loginUserId', $loggedInUser->getId());
-        $response->appendValue('loginUserEmail', $loggedInUser->getEmail());
-        $response->appendValue('loginFacebookUserId', $loggedInUser->getFacebookUserId());
+        $response->appendValue('loginId', $this->getUserSession()->getLoggedInUserId());
+        //$response->appendValue('loginEmail', $loggedInUser->getEmail());
+        $response->appendValue('loginUserId', $this->getUserSession()->getLoggedInUserId());
+        //$response->appendValue('loginUserEmail', $loggedInUser->getEmail());
+        $response->appendValue('loginFacebookUserId', $this->getUserSession()->getFacebookUserId());
         
         
         return $response;
