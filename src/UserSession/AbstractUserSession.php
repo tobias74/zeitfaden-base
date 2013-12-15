@@ -3,6 +3,7 @@
 class AbstractUserSession
 {
 	protected $loggedInUserId = false;
+  protected $facebookUserId = false;
 
   public function setLoggedInUserId($val)
   {
