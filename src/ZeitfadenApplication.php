@@ -38,6 +38,8 @@ class ZeitfadenApplication
   
       case "www.zeitfaden.de":
       case "www.zeitfaden.com":
+      case "livetest.zeitfaden.com":
+      case "livetest.zeitfaden.de":
       case "live.db-shard-one.zeitfaden.com":
       case "live.db-shard-two.zeitfaden.com":
       case "live.db-shard-three.zeitfaden.com":
@@ -46,15 +48,6 @@ class ZeitfadenApplication
         $this->facebookAppSecret = $this->applicationIni['live']['facebook_app_secret'];
         break;
         
-      case "livetest.zeitfaden.com":
-      case "livetest.zeitfaden.de":
-      case "livetest.db-shard-one.zeitfaden.com":
-      case "livetest.db-shard-two.zeitfaden.com":
-      case "livetest.db-shard-three.zeitfaden.com":
-        $this->applicationId = $this->applicationIni['livetest']['application_id'];
-        $this->facebookAppId = $this->applicationIni['livetest']['facebook_app_id'];
-        $this->facebookAppSecret = $this->applicationIni['livetest']['facebook_app_secret'];
-        break;
         
       default:
         throw new \ErrorException("no configuration for this domain: ".$this->httpHost);
