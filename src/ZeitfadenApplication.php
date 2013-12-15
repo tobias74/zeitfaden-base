@@ -131,15 +131,109 @@ class ZeitfadenApplication
   
   
 
+  public function run($serverContext)
+  {
+        $appTimer = $this->phpProfiler->startTimer('#####XXXXXXX A1A1-COMPLETE_RUN XXXXXXXXXXXX################');
+        
+        $serverContext->startSession();
+        
+        $request = $serverContext->getRequest();
+        
+        $response = new \PivoleUndPavoli\Response();
+        
+
+
+        // check for options-reuqest
+        if ($request->getRequestMethod() === 'OPTIONS')
+        {
+          $appTimer->stop();
+          
+          $profilerJson = json_encode(array(
+              'phpLog' => $this->phpProfiler->getHash(),
+              'dbLog' => $this->mySqlProfiler->getHash()
+          ));
+          
+          return $response;
+        }        
+
+        
+        $userSessionRecognizer = $this->dependencyManager->get('UserSessionRecognizer');
+        $session = $_SESSION;
+
+        $this->setUserSession($userSessionRecognizer->recognizeUserSession($_SESSION));
+                
+        
+        $this->getRouteManager()->analyzeRequest($request);
+        
+        
+        $frontController = new \PivoleUndPavoli\FrontController($this);
+        $frontController->setDependencyManager($this->dependencyManager);
+        
+        try
+        {
+          $frontController->dispatch($request,$response);
+          $response->appendValue('status',ZeitfadenApplication::STATUS_OK);
+          $response->appendValue('requestCompletedSuccessfully',true);
+        }
+        catch (ZeitfadenException $e)
+        {
+          $response->enable();
+          $response->appendValue('status',$e->getCode());
+          $response->appendValue('errorMessage',$e->getMessage());
+          $response->appendValue('stackTrace',$e->getTraceAsString());
+        }
+        catch (ZeitfadenNoMatchException $e)
+        {
+          $response->appendValue('error', ZeitfadenApplication::STATUS_ERROR_SOLE_NOT_FOUND);
+          $response->appendValue('errorMessage',$e->getMessage());
+          $response->appendValue('stackTrace',$e->getTraceAsString());
+        }
+        
+        $response->appendValue('profilerData',array(
+          'phpProfiler'   => $this->phpProfiler->getHash(),
+          'mysqlProfiler' => $this->mySqlProfiler->getHash()  
+        )); 
+        
+
+        
+        if ($this->getUserSession()->getFacebookUserId() != false) 
+        {
+            $response->appendValue('isFacebookUser', true);
+        } 
+        else 
+        {
+            $response->appendValue('isFacebookUser', false);
+        }        
+
+
+
+        
+        $appTimer->stop();
+        
+        $profilerJson = json_encode(array(
+            'phpLog' => $this->phpProfiler->getHash(),
+            'dbLog' => $this->mySqlProfiler->getHash()
+        ));
+        
+        $response->addHeader("ZeitfadenProfiler: ".$profilerJson);
+        
+        
+        $response->appendValue('loginId', $loggedInUser->getId());
+        $response->appendValue('loginEmail', $loggedInUser->getEmail());
+        $response->appendValue('loginUserId', $loggedInUser->getId());
+        $response->appendValue('loginUserEmail', $loggedInUser->getEmail());
+        $response->appendValue('loginFacebookUserId', $loggedInUser->getFacebookUserId());
+        
+        
+        return $response;
+  }
+
+
+
+
 	
     public function runRestful($serverContext)
     {
-        // the application should use a UserSessionRecognizer!
-        // in that case the application would not need the oauth2-servcie anymore, becuae the recognizer would have it.
-        
-        
-        // maybe we can refacrtor the Application furth down? 
-      
       
         $appTimer = $this->phpProfiler->startTimer('#####XXXXXXX A1A1-COMPLETE_RUN XXXXXXXXXXXX################');
         
@@ -167,11 +261,8 @@ class ZeitfadenApplication
         
         $userSessionRecognizer = $this->dependencyManager->get('UserSessionRecognizer');
         $session = $_SESSION;
-        //print_r($session);
 
         $this->setUserSession($userSessionRecognizer->recognizeUserSession($_SESSION));
-        //print_r($this->getUserSession());
-        //die();
                 
         
         $this->getRouteManager()->analyzeRequest($request);
@@ -182,20 +273,6 @@ class ZeitfadenApplication
 
         $frontController->dispatch($request,$response);
         
-        /*
-        try
-        {
-            $frontController->dispatch($request,$response);
-        }
-        catch (ZeitfadenException $e)
-        {
-            die($e->getMessage());
-        }
-        catch (ZeitfadenNoMatchException $e)
-        {
-            die($e->getMessage());
-        }
-        */
 
         
         $appTimer->stop();

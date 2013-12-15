@@ -19,6 +19,11 @@ class AbstractUserSession
     $this->facebookUserId = $val;
   }
 
+  public function getFacebookUserId()
+  {
+    return $this->facebookUserId;
+  }
+
 
 	protected function isUserLoggedIn()
 	{
