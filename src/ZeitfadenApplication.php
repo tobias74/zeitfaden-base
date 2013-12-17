@@ -152,6 +152,7 @@ class ZeitfadenApplication
         
         $userSessionRecognizer = $this->dependencyManager->get('UserSessionRecognizer');
         $session = $_SESSION;
+        
 
         $this->setUserSession($userSessionRecognizer->recognizeUserSession($_SESSION));
                 
@@ -200,6 +201,7 @@ class ZeitfadenApplication
 
 
 
+
         
         $appTimer->stop();
         
@@ -210,13 +212,12 @@ class ZeitfadenApplication
         
         $response->addHeader("ZeitfadenProfiler: ".$profilerJson);
         
-        
         $response->appendValue('loginId', $this->getUserSession()->getLoggedInUserId());
         //$response->appendValue('loginEmail', $loggedInUser->getEmail());
         $response->appendValue('loginUserId', $this->getUserSession()->getLoggedInUserId());
         //$response->appendValue('loginUserEmail', $loggedInUser->getEmail());
         $response->appendValue('loginFacebookUserId', $this->getUserSession()->getFacebookUserId());
-        
+        $response->appendValue('loginUserEmail', isset($_REQUEST['email']) ? $_REQUEST['email'] : '');
         
         return $response;
   }

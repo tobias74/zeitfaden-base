@@ -15,5 +15,6 @@ require_once(dirname(__FILE__).'/UserSessionRecognizer.php');
 require_once(dirname(__FILE__).'/ZeitfadenApplication.php');
 require_once(dirname(__FILE__).'/ZeitfadenShardingService.php');
 
+require_once(dirname(__FILE__).'/controller/OAuth2Controller.php');
 
 
