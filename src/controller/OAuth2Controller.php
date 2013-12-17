@@ -1,6 +1,18 @@
 <?php
 //http://test.zeitfaden.com/OAuth2/authorize/?response_type=code&client_id=testclient&state=xyz
 
+
+//http://test.zeitfaden.com/OAuth2/authorize/?response_type=code&client_id=testclient&state=xyz
+
+
+//http://test.zeitfaden.com/station/create/applicationItemId/23/?access_token=54b1ab803516b25336d8704d23b9c78f0879ed36
+
+//curl -u testclient:testpass http://test.zeitfaden.com/OAuth2/token/ -d 'grant_type=authorization_code&code=8b9f5764592f1861ce1a66a45630209c40af31ed'
+
+//http://test.zeitfaden.com//OAuth2/authorize/?response_type=code&client_id=testclient&state=xyz
+
+
+
 class OAuth2Controller extends AbstractZeitfadenController
 {
   protected function declareActionsThatNeedLogin()
