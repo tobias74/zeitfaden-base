@@ -21,31 +21,35 @@ class ZeitfadenApplication
     $this->dependencyConfigurator = $configData['dependencyConfigurator'];
     $this->configLoader = $configData['configLoader'];
     $this->configurationServiceName = $configData['configurationServiceName'];
-    $this->applicationIni = $configData['applicationIni'];
+    
 
     
 		switch ($this->httpHost)
     {
       case "test.zeitfaden.de":
       case "test.zeitfaden.com":
+      case "srv_1_test.zeitfaden.com":
+      case "srv_2_test.zeitfaden.com":
+      case "srv_3_test.zeitfaden.com":
+      case "srv_4_test.zeitfaden.com":
       case "test.db-shard-one.zeitfaden.com":
       case "test.db-shard-two.zeitfaden.com":
       case "test.db-shard-three.zeitfaden.com":
-        $this->applicationId = $this->applicationIni['test']['application_id'];
-        $this->facebookAppId = $this->applicationIni['test']['facebook_app_id'];
-        $this->facebookAppSecret = $this->applicationIni['test']['facebook_app_secret'];
+        $this->applicationIni = $configData['applicationIni']['test'];
         break;
   
       case "www.zeitfaden.de":
       case "www.zeitfaden.com":
+      case "srv_1_live.zeitfaden.com":
+      case "srv_2_live.zeitfaden.com":
+      case "srv_3_live.zeitfaden.com":
+      case "srv_4_live.zeitfaden.com":
       case "livetest.zeitfaden.com":
       case "livetest.zeitfaden.de":
       case "live.db-shard-one.zeitfaden.com":
       case "live.db-shard-two.zeitfaden.com":
       case "live.db-shard-three.zeitfaden.com":
-        $this->applicationId = $this->applicationIni['live']['application_id'];
-        $this->facebookAppId = $this->applicationIni['live']['facebook_app_id'];
-        $this->facebookAppSecret = $this->applicationIni['live']['facebook_app_secret'];
+        $this->applicationIni = $configData['applicationIni']['live'];
         break;
         
         
@@ -54,6 +58,10 @@ class ZeitfadenApplication
         break;
         
     }
+
+    $this->applicationId = $this->applicationIni['application_id'];
+    $this->facebookAppId = $this->applicationIni['facebook_app_id'];
+    $this->facebookAppSecret = $this->applicationIni['facebook_app_secret'];
      
      	
 		
@@ -94,6 +102,11 @@ class ZeitfadenApplication
   public function getFacebookAppId()
   {
       return $this->facebookAppId;
+  }
+
+  public function getApplicationIni()
+  {
+      return $this->applicationIni;
   }
   
   public function getFaceBookAppSecret()
