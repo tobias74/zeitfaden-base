@@ -35,7 +35,13 @@ abstract class AbstractZeitfadenController
 		return $this->_request->getParam($name,$default);
 	}
 	
-	
+  
+	public function setDatabase($val)
+  {
+    $this->database = $val;
+  }
+  
+    
   public function setElasticSearchService($val)
   {
     $this->elasticSearchService = $val;
@@ -45,7 +51,6 @@ abstract class AbstractZeitfadenController
   {
     return $this->elasticSearchService;
   }
-
 
   public function getLoggedInUserId()
   {
