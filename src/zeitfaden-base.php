@@ -10,6 +10,7 @@ require_once(dirname(__FILE__).'/UserSession/FacebookUserSession.php');
 require_once(dirname(__FILE__).'/UserSession/EmailPasswordUserSession.php');
 require_once(dirname(__FILE__).'/UserSession/NativeUserSession.php');
 require_once(dirname(__FILE__).'/UserSession/AdminUserSession.php');
+require_once(dirname(__FILE__).'/UserSession/OAuth2UserSession.php');
 require_once(dirname(__FILE__).'/UserSessionRecognizer.php');
 
 require_once(dirname(__FILE__).'/ZeitfadenApplication.php');
