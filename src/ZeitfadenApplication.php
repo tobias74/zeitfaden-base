@@ -340,6 +340,23 @@ class ZeitfadenApplication
         )
     ));
         
+        
+    $routeManager->addRoute(new \PivoleUndPavoli\Route(
+        'getStationsByQuery/:useEngine/:query',
+        array(
+            'controller' => 'station',
+            'action' => 'getByQuery'
+        )
+    ));
+
+    $routeManager->addRoute(new \PivoleUndPavoli\Route(
+        'getUsersByQuery/:useEngine/:query',
+        array(
+            'controller' => 'user',
+            'action' => 'getByQuery'
+        )
+    ));
+        
     $routeManager->addRoute(new \PivoleUndPavoli\Route(
         'oauth/:action/*',
         array(
