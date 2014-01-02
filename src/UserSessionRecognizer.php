@@ -49,7 +49,7 @@ class UserSessionRecognizer
       //$isOAuthSession=true;
     
       $userSession = new OAuth2UserSession();
-      $userSession->setOAuth2ApplicationId($oAuthApplicationId);
+      $userSession->setOAuthApplicationId($oAuthApplicationId);
       $userSession->setLoggedInUserId($loggedInUserId);
       
       return $userSession; 
