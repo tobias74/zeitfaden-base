@@ -37,6 +37,7 @@ class UserSessionRecognizer
   {
     if (!$this->getOAuth2Service()->verifyResourceRequest(OAuth2\Request::createFromGlobals()))
     {
+      error_log('wrong oauth session? ########################-------------------------------------------------------');
       $this->getOAuth2Service()->getResponse()->send();
       die();
     }
