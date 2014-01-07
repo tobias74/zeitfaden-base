@@ -25,6 +25,14 @@ abstract class AbstractZeitfadenController
 
   }
 
+  protected function requiresLoggedInUser()
+  {
+    if (!$this->isUserLoggedIn())
+    {
+      throw new ErrorException('login required');
+    }
+  }
+
   protected function getUserSession()
   {
     return $this->getApplication()->getUserSession();  

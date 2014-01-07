@@ -26,7 +26,7 @@ class AbstractUserSession
   }
 
 
-	protected function isUserLoggedIn()
+	public function isUserLoggedIn()
 	{
 		if ($this->getLoggedInUserId() !== false)
 		{
