@@ -287,7 +287,9 @@ class ZeitfadenApplication
           $response->appendValue('error', ZeitfadenApplication::STATUS_ERROR_SOLE_NOT_FOUND);
           $response->appendValue('errorMessage',$e->getMessage());
           $response->appendValue('stackTrace',$e->getTraceAsString());
-          $response->addHeader('HTTP/1.0 404 Not Found');
+          $response->addHeader('X-Tobias: some');
+          $response->addHeader('HTTP/1.0 404 Not Found',true,404);
+          
         }
               
 
