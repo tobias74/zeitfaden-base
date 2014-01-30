@@ -278,8 +278,18 @@ class ZeitfadenApplication
         $frontController = new \PivoleUndPavoli\FrontController($this);
         $frontController->setDependencyManager($this->dependencyManager);
 
-        $frontController->dispatch($request,$response);
-        
+        try
+        {
+          $frontController->dispatch($request,$response);
+        }
+        catch (ZeitfadenNoMatchException $e)
+        {
+          $response->appendValue('error', ZeitfadenApplication::STATUS_ERROR_SOLE_NOT_FOUND);
+          $response->appendValue('errorMessage',$e->getMessage());
+          $response->appendValue('stackTrace',$e->getTraceAsString());
+          $response->addHeader('HTTP/1.0 404 Not Found');
+        }
+              
 
         
         $appTimer->stop();
