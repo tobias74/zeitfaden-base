@@ -76,9 +76,10 @@ abstract class AbstractZeitfadenController
 
   public function getImageAction()
   {
+    $format = $this->_request->getParam('format','original');
     $imageSize = $this->_request->getParam('imageSize','medium');
     $serveAttachmentUrl = $this->getAttachmentUrlByRequest($this->_request);
-    $flyUrl = 'http://flyservice.butterfurz.de/image/getFlyImageId/imageSize/'.$imageSize.'?imageUrl='.$serveAttachmentUrl;
+    $flyUrl = 'http://flyservice.butterfurz.de/image/getFlyImageId/format/'.$format.'/imageSize/'.$imageSize.'?imageUrl='.$serveAttachmentUrl;
     $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
