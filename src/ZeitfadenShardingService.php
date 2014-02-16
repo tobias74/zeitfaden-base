@@ -44,7 +44,7 @@ class ZeitfadenShardingService
 
   public function getShardDataByUserId($userId)
   {
-    $url = 'http://shardmaster.butterfurz.de/shard/getShardForUser//userId/'.$userId.'/applicationId/'.$this->getApplicationId();
+    $url = 'http://shardmaster.butterfurz.de/shard/getShardForUser/userId/'.$userId.'/applicationId/'.$this->getApplicationId();
     $r = new HttpRequest($url, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
