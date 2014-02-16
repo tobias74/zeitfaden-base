@@ -85,6 +85,17 @@ abstract class AbstractZeitfadenController
     $this->sendGridFile($values);    
   }
 
+  public function getVideoAction()
+  {
+    $format = $this->_request->getParam('format','webm');
+    $serveAttachmentUrl = $this->getAttachmentUrlByRequest($this->_request);
+    $flyUrl = 'http://flyservice.butterfurz.de/video/getFlyVideoId/format/'.$format.'?videoUrl='.$serveAttachmentUrl;
+    $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
+    $r->send();
+    $values = json_decode($r->getResponseBody(),true);
+    $this->sendGridFile($values);    
+    
+  }
 
   protected function sendGridFile($values)
   {
