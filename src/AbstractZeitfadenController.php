@@ -25,6 +25,83 @@ abstract class AbstractZeitfadenController
 
   }
 
+	
+  protected function attachLocation($spec, $request)
+  {
+  	$latitude = $request->getParam('latitude',false);
+  	$longitude = $request->getParam('longitude',false);
+  	$distance = $request->getParam('distance',false);
+	
+	if ($latitude && $longitude && $distance)
+	{
+      $criteria = new \VisitableSpecification\ST_WithinDistanceCriteria('startLocation', $longitude, $latitude, $distance);
+	  $oldCriteria = $spec->getCriteria();
+	  if ($oldCriteria)
+	  {
+	  	$spec->setCriteria($oldCriteria->logicalAnd($criteria));
+	  }
+	  else
+	  {
+	  	$spec->setCriteria($criteria);
+	  }
+	}
+
+	return $spec;	
+  	
+  }
+  
+  protected function attachDateTime($spec, $request)
+  {
+	$datetime = $request->getParam('datetime',false);
+	$sort = $request->getParam('sort',false);
+
+	if ($datetime && $sort)
+	{
+		if ($sort === 'intoThePast')
+		{
+			$criteria = new \VisitableSpecification\LessOrEqualCriteria('startDate', $datetime);
+			$orderer = new \VisitableSpecification\SingleDescendingOrderer('startDate');
+		}
+		else if ($sort === 'intoTheFuture')
+		{
+			$criteria = new \VisitableSpecification\GreaterOrEqualCriteria('startDate', $datetime);
+			$orderer = new \VisitableSpecification\SingleAscendingOrderer('startDate');
+		}
+		else 
+		{
+			throw new \WrongRequestException('');	
+		}
+
+		$spec->setOrderer($orderer);
+		
+  	    $oldCriteria = $spec->getCriteria();
+	    if ($oldCriteria)
+	    {
+	  	  $spec->setCriteria($oldCriteria->logicalAnd($criteria));
+	    }
+	    else
+	    {
+	  	  $spec->setCriteria($criteria);
+	    }
+		
+	}
+	else 
+	{
+		return $spec;	
+	}
+  	
+  }
+
+
+  protected function getSpecificationByRequest($request)
+  {
+	$spec = new \VisitableSpecification\Specification();
+	$spec = $this->attachLocation($spec, $request);
+	$spec = $this->attachDateTime($spec, $request);
+
+	return $spec;
+  }
+
   protected function requiresLoggedInUser()
   {
     if (!$this->isUserLoggedIn())
