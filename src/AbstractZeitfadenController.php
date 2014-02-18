@@ -54,10 +54,11 @@ abstract class AbstractZeitfadenController
   {
   	$datetime = $request->getParam('datetime',false);
   	$sort = $request->getParam('sort',false);
+    $direction = $request->getParam('direction',false);
     $lastId = $request->getParam('lastId',false);
 
 
-  	if ($datetime && $sort)
+  	if ($datetime && $sort && $direction)
   	{
   	  if ($lastId)
       {
@@ -70,20 +71,29 @@ abstract class AbstractZeitfadenController
         $value = $datetime;
       }
       
-  		if ($sort === 'intoThePast')
-  		{
-  			$criteria = new \VisitableSpecification\LessOrEqualCriteria($field, $value);
-  			$orderer = new \VisitableSpecification\SingleDescendingOrderer($field);
-  		}
-  		else if ($sort === 'intoTheFuture')
-  		{
-  			$criteria = new \VisitableSpecification\GreaterOrEqualCriteria($field,$value);
-  			$orderer = new \VisitableSpecification\SingleAscendingOrderer($field);
-  		}
-  		else 
-  		{
-  			throw new \WrongRequestException('');	
-  		}
+      if ($sort === 'byTime')
+      {
+        if ($direction === 'intoThePast')
+        {
+          $criteria = new \VisitableSpecification\LessOrEqualCriteria($field, $value);
+          $orderer = new \VisitableSpecification\SingleDescendingOrderer($field);
+        }
+        else if ($direction === 'intoTheFuture')
+        {
+          $criteria = new \VisitableSpecification\GreaterOrEqualCriteria($field,$value);
+          $orderer = new \VisitableSpecification\SingleAscendingOrderer($field);
+        }
+        else 
+        {
+          throw new \WrongRequestException(''); 
+        }
+      }
+      else 
+      {
+        throw new \WrongRequestException(''); 
+      }
+
+      
   
   		$spec->setOrderer($orderer);
   		
