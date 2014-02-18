@@ -32,74 +32,88 @@ abstract class AbstractZeitfadenController
   	$longitude = $request->getParam('longitude',false);
   	$distance = $request->getParam('distance',false);
 	
-	if ($latitude && $longitude && $distance)
-	{
-      $criteria = new \VisitableSpecification\ST_WithinDistanceCriteria('startLocation', $longitude, $latitude, $distance);
-	  $oldCriteria = $spec->getCriteria();
-	  if ($oldCriteria)
-	  {
-	  	$spec->setCriteria($oldCriteria->logicalAnd($criteria));
-	  }
-	  else
-	  {
-	  	$spec->setCriteria($criteria);
-	  }
-	}
-
-	return $spec;	
+  	if ($latitude && $longitude && $distance)
+  	{
+        $criteria = new \VisitableSpecification\ST_WithinDistanceCriteria('startLocation', $longitude, $latitude, $distance);
+  	  $oldCriteria = $spec->getCriteria();
+  	  if ($oldCriteria)
+  	  {
+  	  	$spec->setCriteria($oldCriteria->logicalAnd($criteria));
+  	  }
+  	  else
+  	  {
+  	  	$spec->setCriteria($criteria);
+  	  }
+  	}
+  
+  	return $spec;	
   	
   }
   
   protected function attachDateTime($spec, $request)
   {
-	$datetime = $request->getParam('datetime',false);
-	$sort = $request->getParam('sort',false);
+  	$datetime = $request->getParam('datetime',false);
+  	$sort = $request->getParam('sort',false);
+    $lastId = $request->getParam('lastId',false);
 
-	if ($datetime && $sort)
-	{
-		if ($sort === 'intoThePast')
-		{
-			$criteria = new \VisitableSpecification\LessOrEqualCriteria('startDate', $datetime);
-			$orderer = new \VisitableSpecification\SingleDescendingOrderer('startDate');
-		}
-		else if ($sort === 'intoTheFuture')
-		{
-			$criteria = new \VisitableSpecification\GreaterOrEqualCriteria('startDate', $datetime);
-			$orderer = new \VisitableSpecification\SingleAscendingOrderer('startDate');
-		}
-		else 
-		{
-			throw new \WrongRequestException('');	
-		}
 
-		$spec->setOrderer($orderer);
-		
-  	    $oldCriteria = $spec->getCriteria();
-	    if ($oldCriteria)
-	    {
-	  	  $spec->setCriteria($oldCriteria->logicalAnd($criteria));
-	    }
-	    else
-	    {
-	  	  $spec->setCriteria($criteria);
-	    }
-		
-	}
-	else 
-	{
-		return $spec;	
-	}
+  	if ($datetime && $sort)
+  	{
+  	  if ($lastId)
+      {
+        $field = 'startDateWithId';  
+        $value = $datetime.'_'.$lastId;
+      }
+      else
+      {
+        $field = 'startDate';
+        $value = $datetime;
+      }
+      
+  		if ($sort === 'intoThePast')
+  		{
+  			$criteria = new \VisitableSpecification\LessOrEqualCriteria($field, $value);
+  			$orderer = new \VisitableSpecification\SingleDescendingOrderer($field);
+  		}
+  		else if ($sort === 'intoTheFuture')
+  		{
+  			$criteria = new \VisitableSpecification\GreaterOrEqualCriteria($field,$value);
+  			$orderer = new \VisitableSpecification\SingleAscendingOrderer($field);
+  		}
+  		else 
+  		{
+  			throw new \WrongRequestException('');	
+  		}
+  
+  		$spec->setOrderer($orderer);
+  		
+    	    $oldCriteria = $spec->getCriteria();
+  	    if ($oldCriteria)
+  	    {
+  	  	  $spec->setCriteria($oldCriteria->logicalAnd($criteria));
+  	    }
+  	    else
+  	    {
+  	  	  $spec->setCriteria($criteria);
+  	    }
+  		
+        return $spec;
+  	}
+  	else 
+  	{
+  		return $spec;	
+  	}
   	
   }
 
 
   protected function getSpecificationByRequest($request)
   {
-	$spec = new \VisitableSpecification\Specification();
-	$spec = $this->attachLocation($spec, $request);
-	$spec = $this->attachDateTime($spec, $request);
-
-	return $spec;
+  	$spec = new \VisitableSpecification\Specification();
+  	$spec = $this->attachLocation($spec, $request);
+  	$spec = $this->attachDateTime($spec, $request);
+  
+  	return $spec;
   }
 
   protected function requiresLoggedInUser()
