@@ -117,11 +117,38 @@ abstract class AbstractZeitfadenController
   }
 
 
+  protected function attachAttachment($spec, $request)
+  {
+    $mustHaveAttachment = $request->getParam('mustHaveAttachment',false);
+  
+    if ($mustHaveAttachment)
+    {
+        $criteria = new \VisitableSpecification\NotNullCriteria('fileId');
+        $oldCriteria = $spec->getCriteria();
+        if ($oldCriteria)
+        {
+          $spec->setCriteria($oldCriteria->logicalAnd($criteria));
+        }
+        else
+        {
+          $spec->setCriteria($criteria);
+        }
+    }
+  
+    return $spec; 
+    
+  }
+
+
   protected function getSpecificationByRequest($request)
   {
+    $limiter = new \VisitableSpecification\Limiter(0,100);
   	$spec = new \VisitableSpecification\Specification();
+    $spec->setLimiter($limiter);
+    
   	$spec = $this->attachLocation($spec, $request);
   	$spec = $this->attachDateTime($spec, $request);
+    $spec = $this->attachAttachment($spec, $request);
   
   	return $spec;
   }
