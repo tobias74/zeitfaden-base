@@ -60,6 +60,9 @@ abstract class AbstractZeitfadenController
 
   	if ($datetime && $sort && $direction)
   	{
+  	  $timeObject = new DateTime($datetime);
+      $datetime = $timeObject->format('Y-m-d H:i:s');
+      
   	  if ($lastId)
       {
         $field = 'startDateWithId';  
