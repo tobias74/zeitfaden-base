@@ -126,7 +126,9 @@ abstract class AbstractZeitfadenController
   
     if ($mustHaveAttachment)
     {
-        $criteria = new \VisitableSpecification\NotNullCriteria('fileId');
+        //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
+        //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
+        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg');
         $oldCriteria = $spec->getCriteria();
         if ($oldCriteria)
         {
