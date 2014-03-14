@@ -44,7 +44,7 @@ class ZeitfadenShardingService
 
   public function getShardDataByUserId($userId)
   {
-    $url = 'http://shardmaster.butterfurz.de/shard/getShardForUser/userId/'.$userId.'/applicationId/'.$this->getApplicationId();
+    $url = 'http://shardmaster.zeitfaden.com/shard/getShardForUser/userId/'.$userId.'/applicationId/'.$this->getApplicationId();
     $r = new HttpRequest($url, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
@@ -64,7 +64,7 @@ class ZeitfadenShardingService
     {
       try
       {
-        $url = 'http://shardmaster.butterfurz.de/shard/getShardForUser/userId/'.$userId.'/applicationId/'.$this->applicationId;
+        $url = 'http://shardmaster.zeitfaden.com/shard/getShardForUser/userId/'.$userId.'/applicationId/'.$this->applicationId;
         
         $r = new HttpRequest($url, HttpRequest::METH_GET);
         $r->send();
@@ -104,7 +104,7 @@ class ZeitfadenShardingService
   
   public function getAllShards()
   {
-      $url = 'http://shardmaster.butterfurz.de/shard/getAllShards/applicationId/'.$this->applicationId;
+      $url = 'http://shardmaster.zeitfaden.com/shard/getAllShards/applicationId/'.$this->applicationId;
       
       $r = new HttpRequest($url, HttpRequest::METH_GET);
       $r->send();
@@ -178,7 +178,7 @@ class ZeitfadenShardingService
   
   public function getLeastUsedShard()
   {
-    $url = 'http://shardmaster.butterfurz.de/shard/getLeastUsedShard/applicationId/'.$this->getApplicationId();
+    $url = 'http://shardmaster.zeitfaden.com/shard/getLeastUsedShard/applicationId/'.$this->getApplicationId();
     $r = new HttpRequest($url, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
@@ -191,7 +191,7 @@ class ZeitfadenShardingService
 
   public function assignUserToShard($userId,$shardId)
   {
-      $url = 'http://shardmaster.butterfurz.de/shard/assignUserToShard/shardId/'.$shardId.'/userId/'.$userId.'/applicationId/'.$this->getApplicationId();
+      $url = 'http://shardmaster.zeitfaden.com/shard/assignUserToShard/shardId/'.$shardId.'/userId/'.$userId.'/applicationId/'.$this->getApplicationId();
       $r = new HttpRequest($url, HttpRequest::METH_POST);
       $r->send();
       $values = json_decode($r->getResponseBody(),true);
@@ -204,7 +204,7 @@ class ZeitfadenShardingService
   {
     $userId = $user->getId();
     
-    $url = 'http://shardmaster.butterfurz.de/shard/introduceUser/userId/'.$userId.'/applicationId/'.$this->applicationId;
+    $url = 'http://shardmaster.zeitfaden.com/shard/introduceUser/userId/'.$userId.'/applicationId/'.$this->applicationId;
     
     $r = new HttpRequest($url, HttpRequest::METH_PUT);
     $r->send();
