@@ -212,7 +212,7 @@ abstract class AbstractZeitfadenController
     $format = $this->_request->getParam('format','original');
     $imageSize = $this->_request->getParam('imageSize','medium');
     $serveAttachmentUrl = $this->getAttachmentUrlByRequest($this->_request);
-    $flyUrl = 'http://flyservice.butterfurz.de/image/getFlyImageId/format/'.$format.'/imageSize/'.$imageSize.'?imageUrl='.$serveAttachmentUrl;
+    $flyUrl = 'http://flyservice.zeitfaden.com/image/getFlyImageId/format/'.$format.'/imageSize/'.$imageSize.'?imageUrl='.$serveAttachmentUrl;
     $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
@@ -223,7 +223,7 @@ abstract class AbstractZeitfadenController
   {
     $format = $this->_request->getParam('format','webm');
     $serveAttachmentUrl = $this->getAttachmentUrlByRequest($this->_request);
-    $flyUrl = 'http://flyservice.butterfurz.de/video/getFlyVideoId/format/'.$format.'?videoUrl='.$serveAttachmentUrl;
+    $flyUrl = 'http://flyservice.zeitfaden.com/video/getFlyVideoId/format/'.$format.'?videoUrl='.$serveAttachmentUrl;
     $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
