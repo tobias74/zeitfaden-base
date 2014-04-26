@@ -183,15 +183,6 @@ abstract class AbstractZeitfadenController
   }
   
     
-  public function setElasticSearchService($val)
-  {
-    $this->elasticSearchService = $val;
-  }
-
-  protected function getElasticSearchService()
-  {
-    return $this->elasticSearchService;
-  }
 
   public function getLoggedInUserId()
   {
