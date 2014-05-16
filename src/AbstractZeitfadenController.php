@@ -26,7 +26,7 @@ abstract class AbstractZeitfadenController
   }
 
 	
-  protected function attachLocation($spec, $request)
+  protected function attachDistance($spec, $request)
   {
   	$latitude = $request->getParam('latitude',false);
   	$longitude = $request->getParam('longitude',false);
@@ -52,30 +52,30 @@ abstract class AbstractZeitfadenController
   
   protected function attachDateTime($spec, $request)
   {
-  	$datetime = $request->getParam('datetime',false);
   	$sort = $request->getParam('sort',false);
     $direction = $request->getParam('direction',false);
     $lastId = $request->getParam('lastId',false);
 
 
-  	if ($datetime && $sort && $direction)
+  	if ($sort)
   	{
-  	  $timeObject = new DateTime($datetime);
-      $datetime = $timeObject->format('Y-m-d H:i:s');
-      
-  	  if ($lastId)
-      {
-        $field = 'startDateWithId';  
-        $value = $datetime.'_'.$lastId;
-      }
-      else
-      {
-        $field = 'startDate';
-        $value = $datetime;
-      }
-      
       if ($sort === 'byTime')
       {
+    	$datetime = $request->getParam('datetime',false);
+  	    $timeObject = new DateTime($datetime);
+        $datetime = $timeObject->format('Y-m-d H:i:s');
+      	
+    	if ($lastId)
+        {
+          $field = 'startDateWithId';  
+          $value = $datetime.'_'.$lastId;
+        }
+        else
+        {
+          $field = 'startDate';
+          $value = $datetime;
+        }
+		
         if ($direction === 'intoThePast')
         {
           $criteria = new \VisitableSpecification\LessOrEqualCriteria($field, $value);
@@ -91,24 +91,52 @@ abstract class AbstractZeitfadenController
           throw new \WrongRequestException(''); 
         }
       }
+      else if ($sort === 'byDistanceToPin')
+      {
+        $datetimeHigh = $request->getParam('until',false);
+        $datetimeLow = $request->getParam('from',false);
+		
+		if (!$datetimeHigh || !$datetimeLow)
+		{
+			$criteria = false;			
+		}
+		else 
+		{
+	        $timeObjectHigh = new DateTime($datetimeHigh);
+	        $datetimeHigh = $timeObjectHigh->format('Y-m-d H:i:s');
+	        $criteriaHigh = new \VisitableSpecification\LessOrEqualCriteria('startDate',$datetimeHigh);
+	
+	        $timeObjectLow = new DateTime($datetimeLow);
+	        $datetimeLow = $timeObjectLow->format('Y-m-d H:i:s');
+	        $criteriaLow = new \VisitableSpecification\GreaterOrEqualCriteria('startDate',$datetimeLow);
+	        
+	        $criteria = $criteriaHigh->logicalAnd($criteriaLow);
+		}
+
+        
+		
+        $orderer = new DistanceToPinOrderer('startLocation', $request->getParam('latitude',0) , $request->getParam('longitude',0), $direction);          
+      }
       else 
       {
         throw new \WrongRequestException(''); 
       }
 
       
-  
   		$spec->setOrderer($orderer);
   		
-    	    $oldCriteria = $spec->getCriteria();
-  	    if ($oldCriteria)
-  	    {
-  	  	  $spec->setCriteria($oldCriteria->logicalAnd($criteria));
-  	    }
-  	    else
-  	    {
-  	  	  $spec->setCriteria($criteria);
-  	    }
+		if ($criteria)
+		{
+	    	$oldCriteria = $spec->getCriteria();
+	  	    if ($oldCriteria)
+	  	    {
+	  	  	  $spec->setCriteria($oldCriteria->logicalAnd($criteria));
+	  	    }
+	  	    else
+	  	    {
+	  	  	  $spec->setCriteria($criteria);
+	  	    }
+		}
   		
         return $spec;
   	}
@@ -147,11 +175,13 @@ abstract class AbstractZeitfadenController
 
   protected function getSpecificationByRequest($request)
   {
-    $limiter = new \VisitableSpecification\Limiter(0,100);
+  	$offset = $request->getParam('offset',0);
+	$limit = $request->getParam('limit',100);
+    $limiter = new \VisitableSpecification\Limiter($offset,$limit);
   	$spec = new \VisitableSpecification\Specification();
     $spec->setLimiter($limiter);
     
-  	$spec = $this->attachLocation($spec, $request);
+  	$spec = $this->attachDistance($spec, $request);
   	$spec = $this->attachDateTime($spec, $request);
     $spec = $this->attachAttachment($spec, $request);
   
@@ -285,3 +315,5 @@ abstract class AbstractZeitfadenController
 
 
 }
+
+
