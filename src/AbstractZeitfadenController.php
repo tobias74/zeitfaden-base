@@ -173,7 +173,32 @@ abstract class AbstractZeitfadenController
   }
 
 
-  protected function getSpecificationByRequest($request)
+  protected function attachUserId($spec, $request)
+  {
+    $userId = $request->getParam('userId',false);
+  
+    if ($userId)
+    {
+        //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
+        //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
+        $criteria = new \VisitableSpecification\EqualCriteria('userId',$userId);
+        $oldCriteria = $spec->getCriteria();
+        if ($oldCriteria)
+        {
+          $spec->setCriteria($oldCriteria->logicalAnd($criteria));
+        }
+        else
+        {
+          $spec->setCriteria($criteria);
+        }
+    }
+  
+    return $spec; 
+    
+  }
+
+
+  public function getSpecificationByRequest($request)
   {
   	$offset = $request->getParam('offset',0);
 	$limit = $request->getParam('limit',100);
@@ -184,6 +209,7 @@ abstract class AbstractZeitfadenController
   	$spec = $this->attachDistance($spec, $request);
   	$spec = $this->attachDateTime($spec, $request);
     $spec = $this->attachAttachment($spec, $request);
+    $spec = $this->attachUserId($spec, $request);
   
   	return $spec;
   }
