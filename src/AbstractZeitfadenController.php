@@ -30,11 +30,11 @@ abstract class AbstractZeitfadenController
   {
   	$latitude = $request->getParam('latitude',false);
   	$longitude = $request->getParam('longitude',false);
-  	$distance = $request->getParam('distance',false);
+  	$maxDistance = $request->getParam('maxDistance',false);
 	
-  	if ($latitude && $longitude && $distance)
+  	if ($latitude && $longitude && $maxDistance)
   	{
-        $criteria = new \VisitableSpecification\ST_WithinDistanceCriteria('startLocation', $longitude, $latitude, $distance);
+        $criteria = new \VisitableSpecification\ST_WithinDistanceCriteria('startLocation', $longitude, $latitude, $maxDistance);
   	  $oldCriteria = $spec->getCriteria();
   	  if ($oldCriteria)
   	  {
