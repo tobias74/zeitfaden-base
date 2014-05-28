@@ -114,7 +114,7 @@ abstract class AbstractZeitfadenController
 		}
 
         
-		if ($distance == 'farFirst')
+		if ($direction == 'farFirst')
 		{
 			$dText = 'desc';
 		}
