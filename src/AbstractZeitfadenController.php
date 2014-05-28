@@ -115,7 +115,7 @@ abstract class AbstractZeitfadenController
 
         
 		
-        $orderer = new DistanceToPinOrderer('startLocation', $request->getParam('latitude',0) , $request->getParam('longitude',0), $direction);          
+        $orderer = new \VisitableSpecification\DistanceToPinOrderer('startLocation', $request->getParam('latitude',0) , $request->getParam('longitude',0), $direction);          
       }
       else 
       {

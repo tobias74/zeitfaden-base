@@ -1,6 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__).'/DistanceToPinOrderer.php');
 require_once(dirname(__FILE__).'/AbstractZeitfadenController.php');
 require_once(dirname(__FILE__).'/ZeitfadenOAuth2.php');
 require_once(dirname(__FILE__).'/ZeitfadenExceptions.php');

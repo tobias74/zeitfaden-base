@@ -241,7 +241,6 @@ class ZeitfadenApplication
 	
     public function runRestful($serverContext)
     {
-      
         $appTimer = $this->phpProfiler->startTimer('#####XXXXXXX A1A1-COMPLETE_RUN XXXXXXXXXXXX################');
         
         $serverContext->startSession();
