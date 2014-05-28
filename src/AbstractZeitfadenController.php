@@ -114,8 +114,15 @@ abstract class AbstractZeitfadenController
 		}
 
         
-		
-        $orderer = new \VisitableSpecification\DistanceToPinOrderer('startLocation', $request->getParam('latitude',0) , $request->getParam('longitude',0), $direction);          
+		if ($distance == 'farFirst')
+		{
+			$dText = 'desc';
+		}
+		else 
+		{
+			$dText = 'asc';
+		}
+        $orderer = new \VisitableSpecification\DistanceToPinOrderer('startLocation', $request->getParam('latitude',0) , $request->getParam('longitude',0), $dText);          
       }
       else 
       {
