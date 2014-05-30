@@ -259,7 +259,20 @@ abstract class AbstractZeitfadenController
     return $this->getUserSession()->isUserLoggedIn();
 	}
 
+  protected function getAttachmentUrlByRequest($request)
+  {
+    $entityId = $request->getParam($this->idName,0);
+	return $this->getAttachmentUrlByEntityId($entityId);    
+  }
 
+
+	protected function clearAttachmentCacheForEntityId($entityId)
+	{
+	    $serveAttachmentUrl = $this->getAttachmentUrlByEntityId($entityId);
+	    $flyUrl = 'http://flyservice.zeitfaden.com/image/clearAll/?imageUrl='.$serveAttachmentUrl;
+	    $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
+	    $r->send();
+	}
 
   public function getImageAction()
   {
