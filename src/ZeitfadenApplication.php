@@ -38,8 +38,8 @@ class ZeitfadenApplication
         $this->applicationIni = $configData['applicationIni']['test'];
         break;
   
-      case "www.zeitfaden.de":
-      case "www.zeitfaden.com":
+      case "live.zeitfaden.de":
+      case "live.zeitfaden.com":
       case "srv_1_live.zeitfaden.com":
       case "srv_2_live.zeitfaden.com":
       case "srv_3_live.zeitfaden.com":
