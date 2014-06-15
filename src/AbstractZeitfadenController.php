@@ -155,12 +155,38 @@ abstract class AbstractZeitfadenController
   }
 
 
-  protected function attachAttachment($spec, $request)
+  protected function attachStationAttachment($spec, $request)
   {
-    $mustHaveAttachment = $request->getParam('mustHaveAttachment',false);
+    $mustHaveAttachment = $request->getParam('stationMustHaveAttachment',false);
   
     if ($mustHaveAttachment)
     {
+        //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
+        //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
+        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg');
+        $oldCriteria = $spec->getCriteria();
+        if ($oldCriteria)
+        {
+          $spec->setCriteria($oldCriteria->logicalAnd($criteria));
+        }
+        else
+        {
+          $spec->setCriteria($criteria);
+        }
+    }
+  
+    return $spec; 
+    
+  }
+
+
+  protected function attachUserAttachment($spec, $request)
+  {
+    $mustHaveAttachment = $request->getParam('userMustHaveAttachment',false);
+  
+    if ($mustHaveAttachment)
+    {
+      error_log('user must have attachment');
         //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
         //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
         $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg');
@@ -205,21 +231,37 @@ abstract class AbstractZeitfadenController
   }
 
 
-  public function getSpecificationByRequest($request)
+  public function getUserSpecificationByRequest($request)
   {
   	$offset = $request->getParam('offset',0);
-	$limit = $request->getParam('limit',100);
+  	$limit = $request->getParam('limit',100);
     $limiter = new \VisitableSpecification\Limiter($offset,$limit);
   	$spec = new \VisitableSpecification\Specification();
     $spec->setLimiter($limiter);
     
-  	$spec = $this->attachDistance($spec, $request);
-  	$spec = $this->attachDateTime($spec, $request);
-    $spec = $this->attachAttachment($spec, $request);
-    $spec = $this->attachUserId($spec, $request);
+    $spec = $this->attachUserAttachment($spec, $request);
   
   	return $spec;
   }
+
+
+  public function getstationSpecificationByRequest($request)
+  {
+    $offset = $request->getParam('offset',0);
+    $limit = $request->getParam('limit',100);
+    $limiter = new \VisitableSpecification\Limiter($offset,$limit);
+    $spec = new \VisitableSpecification\Specification();
+    $spec->setLimiter($limiter);
+    
+    $spec = $this->attachDistance($spec, $request);
+    $spec = $this->attachDateTime($spec, $request);
+    $spec = $this->attachStationAttachment($spec, $request);
+    
+    $spec = $this->attachUserId($spec, $request);
+  
+    return $spec;
+  }
+
 
   protected function requiresLoggedInUser()
   {
