@@ -163,7 +163,7 @@ abstract class AbstractZeitfadenController
     {
         //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
         //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
-        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg');
+        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg','station');
         $oldCriteria = $spec->getCriteria();
         if ($oldCriteria)
         {
@@ -189,7 +189,7 @@ abstract class AbstractZeitfadenController
       error_log('user must have attachment');
         //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
         //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
-        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg');
+        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg','user');
         $oldCriteria = $spec->getCriteria();
         if ($oldCriteria)
         {
