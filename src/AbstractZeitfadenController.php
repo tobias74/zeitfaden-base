@@ -61,8 +61,16 @@ abstract class AbstractZeitfadenController
   	{
       if ($sort === 'byTime')
       {
-    	$datetime = $request->getParam('datetime',false);
-  	    $timeObject = new DateTime($datetime);
+        try
+        {
+          $datetime = $request->getParam('datetime',false);
+          $timeObject = new DateTime($datetime);
+        }
+        catch (\Exception $e)
+        {
+          $timeObject = new DateTime();
+        }
+        
         $datetime = $timeObject->format('Y-m-d H:i:s');
       	
     	if ($lastId)
