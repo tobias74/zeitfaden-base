@@ -1,5 +1,9 @@
 <?php
 
+// for better performance, searching can be done using a lastId to identify the last Station of the previous request.
+// this eliminates offset and limit.
+// lastId cannot be used when searching users or ordering stations by distance from a geopoint.
+
 abstract class AbstractZeitfadenController
 {
 
