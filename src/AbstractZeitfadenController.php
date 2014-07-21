@@ -332,8 +332,10 @@ abstract class AbstractZeitfadenController
   {
     $format = $this->_request->getParam('format','original');
     $imageSize = $this->_request->getParam('imageSize','medium');
+	$width = $this->_request->getParam('width',100);		
+	$height = $this->_request->getParam('height',100);		
     $serveAttachmentUrl = $this->getAttachmentUrlByRequest($this->_request);
-    $flyUrl = 'http://flyservice.zeitfaden.com/image/getFlyImageId/format/'.$format.'/imageSize/'.$imageSize.'?imageUrl='.$serveAttachmentUrl;
+    $flyUrl = 'http://flyservice.zeitfaden.com/image/getFlyImageId/format/'.$format.'/imageSize/'.$imageSize.'/width/'.$width.'/height/'.$height.'?imageUrl='.$serveAttachmentUrl;
     $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
