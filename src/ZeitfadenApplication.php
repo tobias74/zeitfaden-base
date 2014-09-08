@@ -374,6 +374,13 @@ class ZeitfadenApplication
             'controller' => 'OAuth2'
         )
     ));
+
+    $routeManager->addRoute(new \PivoleUndPavoli\Route(
+        'oauth2/:action/*',
+        array(
+            'controller' => 'OAuth2'
+        )
+    ));
                     
     return $routeManager;
   }

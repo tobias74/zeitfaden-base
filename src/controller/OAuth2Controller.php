@@ -12,6 +12,10 @@
 //http://test.zeitfaden.com//OAuth2/authorize/?response_type=code&client_id=testclient&state=xyz
 
 
+// preparing the mongo-db with equivalent to:
+// INSERT INTO oauth_clients (client_id, client_secret, redirect_uri) VALUES ("testclient", "testpass", "http://fake/");
+
+
 
 class OAuth2Controller extends AbstractZeitfadenController
 {
