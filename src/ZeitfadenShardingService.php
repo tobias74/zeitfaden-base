@@ -1,4 +1,8 @@
 <?php 
+class ZeitfadenSimpleShard
+{
+  
+}
 
 class ZeitfadenShardingService
 {
