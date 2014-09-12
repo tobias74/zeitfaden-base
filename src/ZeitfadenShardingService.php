@@ -4,9 +4,10 @@ class ZeitfadenShardingService
 {
   public function __construct()
   {
-    $this->cachedShardIds = array();
+    $this->cachedByUserId = array();
     $this->cachedShards = array();
-    }
+    $this->cachedById = array();    
+  }
 
   public function setApplicationId($val)
   {
@@ -56,11 +57,7 @@ class ZeitfadenShardingService
 
   public function getShardByUserId($userId)
   {
-    if (isset($this->cachedShardIds[$userId]))
-    {
-      $shard = $this->cachedShardIds[$userId];
-    }
-    else
+    if (!isset($this->cachedByUserId[$userId]))
     {
       try
       {
@@ -74,32 +71,45 @@ class ZeitfadenShardingService
         $shard = $this->shardProvider->provide();
         $this->mapShard($shard,$values['shard']);
 
-        $this->cachedShardIds[$userId] = $shard;
+        $this->cachedByUserId[$userId] = $shard;
       }
       catch (NoMatchException $e)
       {
         throw new NoMatchException('Did not find Shard for UserId: ' . $userId); 
       }
     }
-    return $this->cachedShardIds[$userId];
+
+    return $this->cachedByUserId[$userId];
   }
 
 
 
 
-  public function notusedanymore_____getShardById($shardId)
+  public function getShardById($shardId)
   {
-    if (isset($this->cachedShards[$shardId]))
+    if (!isset($this->cachedById[$shardId]))
     {
-      $shard = $this->cachedShards[$shardId];
-    }
-    else
-    {
-      $shard = $this->getShardRepository()->getById($shardId);
-      $this->cachedShards[$shardId] = $shard;
+      try
+      {
+        $url = 'http://shardmaster.zeitfaden.com/shard/getShardById/shardId/'.$shardId.'/applicationId/'.$this->applicationId;
+        
+        $r = new HttpRequest($url, HttpRequest::METH_GET);
+        $r->send();
+        
+        $values = json_decode($r->getResponseBody(),true);
+        
+        $shard = $this->shardProvider->provide();
+        $this->mapShard($shard,$values['shard']);
+
+        $this->cachedById[$shardId] = $shard;
+      }
+      catch (NoMatchException $e)
+      {
+        throw new NoMatchException('Did not find Shard for ShardId: ' . $shardId); 
+      }
     }
     
-    return $shard;
+    return $this->cachedById[$shardId];
   }
   
   public function getAllShards()

@@ -303,7 +303,13 @@ abstract class AbstractZeitfadenController
 
   public function getLoggedInUserId()
   {
-    return $this->getUserSession()->getLoggedInUserId();
+    $userId = $this->getUserSession()->getLoggedInUserId();
+    if ($userId === '')
+    {
+      $userId = false;
+    }
+    
+    return $userId;
   }
   
 	
