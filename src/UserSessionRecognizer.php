@@ -45,15 +45,22 @@ class UserSessionRecognizer
     
     
     //this is the hacky way, but faster.    
-    $headers = $request->headers('AUTHORIZATION');
-    $headers_alt = $request->headers('Authorization');
-    $value = !empty($headers_alt) || !empty($headers) || (bool) ($request->request('access_token')) || (bool) ($request->query('access_token')) || (bool) ($request->request('grant_type')) || (bool) ($request->query('grant_type'));
+    //$headers = $request->headers('AUTHORIZATION');
+    //$headers_alt = $request->headers('Authorization');
+    
+    //error_log('this is it');
+    //error_log(print_r($headers_alt,true));
+    
+    $value = (bool) ($request->request('access_token')) || (bool) ($request->query('access_token')) ;
     
     return $value;
   }         
   
   public function recognizeLoginIdentityByOAuth2()
   {
+    //$request = OAuth2\Request::createFromGlobals();
+    //$value = $this->getOAuth2Service()->getAccessTokenData($request);
+
     if (!$this->getOAuth2Service()->verifyResourceRequest(OAuth2\Request::createFromGlobals()))
     {
       error_log('wrong oauth session? ########################-------------------------------------------------------');
@@ -101,6 +108,7 @@ class UserSessionRecognizer
   {
       if ($this->isOAuth2Request())
       {
+        error_log('this is an oauth-request');
         $timer = $this->getProfiler()->startTimer('doing oauth2');
         // this is an oauth2-request.
         $userSession = $this->recognizeLoginIdentityByOAuth2();
@@ -108,6 +116,7 @@ class UserSessionRecognizer
       }
       else 
       {
+        error_log('this is not oauth request....');
         // it is not an oauth2 request. carry on.
         $userSession = $this->recognizeLoginIdentityBySession($session);
       }
