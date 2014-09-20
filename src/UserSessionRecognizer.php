@@ -40,17 +40,11 @@ class UserSessionRecognizer
   public function isOAuth2Request()
   {
     $request = OAuth2\Request::createFromGlobals();
+
     // this is the old correct way:
     //$value = $this->getOAuth2Service()->getAccessTokenData($request);
     
-    
     //this is the hacky way, but faster.    
-    //$headers = $request->headers('AUTHORIZATION');
-    //$headers_alt = $request->headers('Authorization');
-    
-    //error_log('this is it');
-    //error_log(print_r($headers_alt,true));
-    
     $value = (bool) ($request->request('access_token')) || (bool) ($request->query('access_token')) ;
     
     return $value;
