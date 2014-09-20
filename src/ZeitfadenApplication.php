@@ -302,6 +302,13 @@ class ZeitfadenApplication
         
         $response->addHeader("ZeitfadenProfiler: ".$profilerJson);
         
+        //error_log('Request took: '.$appTimer->getElapsedTime());
+        
+        if ($appTimer->getElapsedTime() > 3)
+        {
+          error_log('Slow Request: '.print_r($profilerJson,true));
+        }
+        
         return $response;
     }
 		
