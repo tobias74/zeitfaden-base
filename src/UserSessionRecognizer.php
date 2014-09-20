@@ -41,12 +41,13 @@ class UserSessionRecognizer
   {
     $request = OAuth2\Request::createFromGlobals();
     // this is the old correct way:
-    $value = $this->getOAuth2Service()->getAccessTokenData($request);
+    //$value = $this->getOAuth2Service()->getAccessTokenData($request);
     
     
     //this is the hacky way, but faster.    
-    //$headers = $request->headers('AUTHORIZATION');
-    //$value = !empty($headers) || (bool) ($request->request('access_token')) || (bool) ($request->query('access_token'));
+    $headers = $request->headers('AUTHORIZATION');
+    $headers_alt = $request->headers('Authorization');
+    $value = !empty($headers_alt) || !empty($headers) || (bool) ($request->request('access_token')) || (bool) ($request->query('access_token')) || (bool) ($request->request('grant_type')) || (bool) ($request->query('grant_type'));
     
     return $value;
   }         
