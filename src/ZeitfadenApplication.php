@@ -264,11 +264,15 @@ class ZeitfadenApplication
           return $response;
         }        
 
-        
+        $timer = $this->phpProfiler->startTimer('init Session');       
         $userSessionRecognizer = $this->dependencyManager->get('UserSessionRecognizer');
         $session = $_SESSION;
-
+        $timer->stop();
+        
+        
+        $timer = $this->phpProfiler->startTimer('reconginizing Session');       
         $this->setUserSession($userSessionRecognizer->recognizeUserSession($_SESSION));
+        $timer->stop();
                 
         
         $this->getRouteManager()->analyzeRequest($request);

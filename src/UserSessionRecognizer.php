@@ -15,6 +15,15 @@ class UserSessionRecognizer
     return $this->facebook;
   }
 
+  public function setProfiler($val)
+  {
+    $this->profiler = $val;
+  }
+
+  protected function getProfiler()
+  {
+    return $this->profiler;
+  }
 
  	public function setOAuth2Service($val)
   {
@@ -30,7 +39,18 @@ class UserSessionRecognizer
   
   public function isOAuth2Request()
   {
-    return $this->getOAuth2Service()->getAccessTokenData(OAuth2\Request::createFromGlobals());
+    $request = OAuth2\Request::createFromGlobals();
+    // this is the old correct way:
+    //$value = $this->getOAuth2Service()->getAccessTokenData($request);
+    
+    
+    //this is the hacky way, but faster.    
+    $headers = $request->headers('AUTHORIZATION');
+    // check the header, then the querystring, then the request body
+    $value = !empty($headers) || (bool) ($request->request('access_token')) || (bool) ($request->query('access_token'));
+    
+    
+    return $value;
   }         
   
   public function recognizeLoginIdentityByOAuth2()
@@ -82,8 +102,10 @@ class UserSessionRecognizer
   {
       if ($this->isOAuth2Request())
       {
+        $timer = $this->getProfiler()->startTimer('doing oauth2');
         // this is an oauth2-request.
         $userSession = $this->recognizeLoginIdentityByOAuth2();
+        $timer->stop();
       }
       else 
       {
