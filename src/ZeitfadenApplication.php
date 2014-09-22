@@ -24,81 +24,27 @@ class ZeitfadenApplication
         $this->dependencyConfigurator = $configData['dependencyConfigurator'];
         $this->configLoader = $configData['configLoader'];
         $this->configurationServiceName = $configData['configurationServiceName'];
+
+  	    $iniConfiguration = $configData['applicationIni'][$this->httpHost];
+		$this->applicationId = $iniConfiguration['application_id'];
+		$this->facebookAppId = $iniConfiguration['facebook_app_id'];
+		$this->facebookAppSecret = $iniConfiguration['facebook_app_secret'];
     
-		switch ($this->httpHost)
-	    {
-	      case "test.zeitfaden.de":
-	      case "test.zeitfaden.com":
-	      case "srv_1_test.zeitfaden.com":
-	      case "srv_2_test.zeitfaden.com":
-	      case "srv_3_test.zeitfaden.com":
-	      case "srv_4_test.zeitfaden.com":
-	      case "test.db-shard-one.zeitfaden.com":
-	      case "test.db-shard-two.zeitfaden.com":
-	  	    $iniConfiguration = $configData['applicationIni'][$this->httpHost];
-			$this->applicationId = $iniConfiguration['application_id'];
-			$this->facebookAppId = $iniConfiguration['facebook_app_id'];
-			$this->facebookAppSecret = $iniConfiguration['facebook_app_secret'];
 			  
-			  
-	        $this->config = $this->configLoader->getNewConfigInstance();
-			$this->config->shardUrl = $this->httpHost;
+        $this->config = $this->configLoader->getNewConfigInstance();
+		$this->config->shardUrl = $this->httpHost;
 	
-			$this->dependencyConfigurator->configureDependencies($this->dependencyManager,$this);
-	
-	
-	        if ($this->configurationServiceName !== false)
-	        {
-	           $this->configLoader->setConfigurationService( $this->dependencyManager->get($this->configurationServiceName) );
-	        }
-	
-			$this->configLoader->loadConfiguration($iniConfiguration, $this->config);
-	
-	    				  
-	        break;
-	  
-	      case "live.zeitfaden.de":
-	      case "live.zeitfaden.com":
-	      case "srv_1_live.zeitfaden.com":
-	      case "srv_2_live.zeitfaden.com":
-	      case "srv_3_live.zeitfaden.com":
-	      case "srv_4_live.zeitfaden.com":
-	      case "livetest.zeitfaden.com":
-	      case "livetest.zeitfaden.de":
-	      case "live.db-shard-one.zeitfaden.com":
-	      case "live.db-shard-two.zeitfaden.com":
-	      case "live.db-shard-three.zeitfaden.com":
-	        $this->applicationIni = $configData['applicationIni']['live'];
-	    	$this->applicationId = $this->applicationIni['application_id'];
-	    	$this->facebookAppId = $this->applicationIni['facebook_app_id'];
-	    	$this->facebookAppSecret = $this->applicationIni['facebook_app_secret'];
-	
-		    $this->config = $this->configLoader->getNewConfigInstance();
-		
-	
-		    $this->config = $this->configLoader->getNewConfigInstance();
-		
-		
-		    $this->dependencyConfigurator->configureDependencies($this->dependencyManager,$this);
-		
-		
-		    if ($this->configurationServiceName !== false)
-		    {
-		      $this->configLoader->setConfigurationService( $this->dependencyManager->get($this->configurationServiceName) );
-		    }
+		$this->dependencyConfigurator->configureDependencies($this->dependencyManager,$this);
 	
 	
-			$this->configLoader->loadConfiguration($this->httpHost,$this->applicationId, $this->config);
-	        break;
+        if ($this->configurationServiceName !== false)
+        {
+           $this->configLoader->setConfigurationService( $this->dependencyManager->get($this->configurationServiceName) );
+        }
+
+		$this->configLoader->loadConfiguration($iniConfiguration, $this->config);
 	        
 	        
-	      default:
-	      		die('not config du hui. ');
-	      
-	        throw new \ErrorException("no configuration for this domain: ".$this->httpHost);
-	        break;
-	        
-	    }
 		$this->mySqlProfiler = $this->dependencyManager->get('SqlProfiler');
 		$this->phpProfiler = $this->dependencyManager->get('PhpProfiler');
   }
@@ -118,10 +64,6 @@ class ZeitfadenApplication
       return $this->facebookAppId;
   }
 
-  public function getApplicationIni()
-  {
-      return $this->applicationIni;
-  }
   
   public function getFaceBookAppSecret()
   {
