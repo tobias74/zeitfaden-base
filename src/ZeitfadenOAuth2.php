@@ -19,6 +19,7 @@ class ZeitfadenOAuth2
     $this->server = new \OAuth2\Server($storage);
     $this->server->addGrantType(new \OAuth2\GrantType\ClientCredentials($storage));
     $this->server->addGrantType(new OAuth2\GrantType\AuthorizationCode($storage));    
+    $this->server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));    
   }
   
   public function __call($name, $parameters)
