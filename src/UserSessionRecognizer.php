@@ -102,7 +102,7 @@ class UserSessionRecognizer
   {
       if ($this->isOAuth2Request())
       {
-        error_log('this is an oauth-request');
+        //error_log('this is an oauth-request');
         $timer = $this->getProfiler()->startTimer('doing oauth2');
         // this is an oauth2-request.
         $userSession = $this->recognizeLoginIdentityByOAuth2();
@@ -110,7 +110,7 @@ class UserSessionRecognizer
       }
       else 
       {
-        error_log('this is not oauth request....');
+        //error_log('this is not oauth request....');
         // it is not an oauth2 request. carry on.
         $userSession = $this->recognizeLoginIdentityBySession($session);
       }
