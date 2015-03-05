@@ -1,5 +1,18 @@
 <?php
 
+class EntityIdParameter
+{
+  public $userId;
+  public $stationId;
+  
+  public function fromRequest($request)
+  {
+    $this->userId = $request->getParam('userId',false);
+    $this->stationId = $request->getParam('stationId',false);
+  }
+  
+}
+
 // for better performance, searching can be done using a lastId to identify the last Station of the previous request.
 // this eliminates offset and limit.
 // lastId cannot be used when searching users or ordering stations by distance from a geopoint.
@@ -28,6 +41,30 @@ abstract class AbstractZeitfadenController
     die();
 
   }
+
+  protected function getEntityDataByRequest($request)
+  {
+    $entityId = $request->getParam($this->idName,0);
+    $entityData = $this->getMyEntityDataById($userId);
+    return $entityData;
+
+  }
+
+  protected function getAttachmentUrlByRequest($request)
+  {
+    $entityId = $request->getParam($this->idName,0);
+    return $this->getAttachmentUrlByEntityId($entityId);    
+  }
+  
+  protected function clearAttachmentCacheForEntityId($entityId)
+  {
+      $serveAttachmentUrl = $this->getAttachmentUrlByEntityId($entityId);
+      $flyUrl = 'http://flyservice.zeitfaden.com/image/clearAll/?imageUrl='.$serveAttachmentUrl;
+      $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
+      $r->send();
+  }
+
+
 
 	
   protected function attachDistance($spec, $request)
@@ -335,13 +372,6 @@ abstract class AbstractZeitfadenController
 
 
 
-	protected function clearAttachmentCacheForEntityId($entityId)
-	{
-	    $serveAttachmentUrl = $this->getAttachmentUrlByEntityId($entityId);
-	    $flyUrl = 'http://flyservice.zeitfaden.com/image/clearAll/?imageUrl='.$serveAttachmentUrl;
-	    $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
-	    $r->send();
-	}
 
   public function getImageAction()
   {
