@@ -132,11 +132,11 @@ abstract class AbstractZeitfadenController
           $value = $datetime.'_'.$lastId;
           if ($direction === 'intoThePast')
           {
-            $criteria = new \VisitableSpecification\LessCriteria($field, $value);
+            $criteria = new \VisitableSpecification\LessThanCriteria($field, $value);
           }
           else if ($direction === 'intoTheFuture')
           {
-            $criteria = new \VisitableSpecification\GreaterCriteria($field,$value);
+            $criteria = new \VisitableSpecification\GreaterThanCriteria($field,$value);
           }
         }
         else
