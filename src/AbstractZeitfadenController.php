@@ -130,21 +130,35 @@ abstract class AbstractZeitfadenController
         {
           $field = 'startDateWithId';  
           $value = $datetime.'_'.$lastId;
+          if ($direction === 'intoThePast')
+          {
+            $criteria = new \VisitableSpecification\LessCriteria($field, $value);
+          }
+          else if ($direction === 'intoTheFuture')
+          {
+            $criteria = new \VisitableSpecification\GreaterCriteria($field,$value);
+          }
         }
         else
         {
           $field = 'startDate';
           $value = $datetime;
+          if ($direction === 'intoThePast')
+          {
+            $criteria = new \VisitableSpecification\LessOrEqualCriteria($field, $value);
+          }
+          else if ($direction === 'intoTheFuture')
+          {
+            $criteria = new \VisitableSpecification\GreaterOrEqualCriteria($field,$value);
+          }
         }
 		
         if ($direction === 'intoThePast')
         {
-          $criteria = new \VisitableSpecification\LessOrEqualCriteria($field, $value);
           $orderer = new \VisitableSpecification\SingleDescendingOrderer($field);
         }
         else if ($direction === 'intoTheFuture')
         {
-          $criteria = new \VisitableSpecification\GreaterOrEqualCriteria($field,$value);
           $orderer = new \VisitableSpecification\SingleAscendingOrderer($field);
         }
         else 
