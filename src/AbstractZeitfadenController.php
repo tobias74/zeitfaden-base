@@ -59,25 +59,37 @@ abstract class AbstractZeitfadenController
   	$sort = $request->getParam('sort',false);
     $direction = $request->getParam('direction',false);
     $lastId = $request->getParam('lastId',false);
-
-
   	if ($sort)
   	{
       if ($sort === 'byTime')
       {
         try
         {
-          $datetime = $request->getParam('datetime',false);
-          $timeObject = new DateTime($datetime);
+          
+          $timestamp = $request->getParam('timestamp',false);
+          if ($timestamp === false)
+          {
+            $datetime = $request->getParam('datetime',false);
+            error_log('we use datetime '.$datetime);
+            $timeObject = new DateTime($datetime);
+          }
+          else 
+          {
+            error_log('using timestamp '.$timestamp);
+            $timeObject = new DateTime();
+            $timeObject->setTimestamp($timestamp);
+          }
         }
         catch (\Exception $e)
         {
           $timeObject = new DateTime();
         }
         
+        
         $datetime = $timeObject->format('Y-m-d H:i:s');
+        error_log($datetime);
       	
-    	if ($lastId)
+      	if ($lastId)
         {
           $field = 'startDateWithId';  
           $value = $datetime.'_'.$lastId;
@@ -108,12 +120,12 @@ abstract class AbstractZeitfadenController
         $datetimeHigh = $request->getParam('until',false);
         $datetimeLow = $request->getParam('from',false);
 		
-		if (!$datetimeHigh || !$datetimeLow)
-		{
-			$criteria = false;			
-		}
-		else 
-		{
+    		if (!$datetimeHigh || !$datetimeLow)
+    		{
+    			$criteria = false;			
+    		}
+    		else 
+    		{
 	        $timeObjectHigh = new DateTime($datetimeHigh);
 	        $datetimeHigh = $timeObjectHigh->format('Y-m-d H:i:s');
 	        $criteriaHigh = new \VisitableSpecification\LessOrEqualCriteria('startDate',$datetimeHigh);
@@ -123,29 +135,30 @@ abstract class AbstractZeitfadenController
 	        $criteriaLow = new \VisitableSpecification\GreaterOrEqualCriteria('startDate',$datetimeLow);
 	        
 	        $criteria = $criteriaHigh->logicalAnd($criteriaLow);
-		}
+    		}
 
         
-		if ($direction == 'farFirst')
-		{
-			$dText = 'desc';
-		}
-		else 
-		{
-			$dText = 'asc';
-		}
+    		if ($direction == 'farFirst')
+    		{
+    			$dText = 'desc';
+    		}
+    		else 
+    		{
+    			$dText = 'asc';
+    		}
         $orderer = new \VisitableSpecification\DistanceToPinOrderer('startLocation', $request->getParam('latitude',0) , $request->getParam('longitude',0), $dText);          
       }
       else 
       {
+        error_log('wrong request!');
         throw new \WrongRequestException(''); 
       }
 
       
   		$spec->setOrderer($orderer);
   		
-		if ($criteria)
-		{
+  		if ($criteria)
+  		{
 	    	$oldCriteria = $spec->getCriteria();
 	  	    if ($oldCriteria)
 	  	    {
@@ -155,9 +168,9 @@ abstract class AbstractZeitfadenController
 	  	    {
 	  	  	  $spec->setCriteria($criteria);
 	  	    }
-		}
+   		}
   		
-        return $spec;
+      return $spec;
   	}
   	else 
   	{
@@ -257,7 +270,7 @@ abstract class AbstractZeitfadenController
   }
 
 
-  public function getstationSpecificationByRequest($request)
+  public function getStationSpecificationByRequest($request)
   {
     $offset = $request->getParam('offset',0);
     $limit = $request->getParam('limit',100);
@@ -266,6 +279,7 @@ abstract class AbstractZeitfadenController
     $spec->setLimiter($limiter);
     
     $spec = $this->attachDistance($spec, $request);
+
     $spec = $this->attachDateTime($spec, $request);
     $spec = $this->attachStationAttachment($spec, $request);
     
@@ -319,11 +333,6 @@ abstract class AbstractZeitfadenController
     return $this->getUserSession()->isUserLoggedIn();
 	}
 
-  protected function getAttachmentUrlByRequest($request)
-  {
-    $entityId = $request->getParam($this->idName,0);
-	return $this->getAttachmentUrlByEntityId($entityId);    
-  }
 
 
 	protected function clearAttachmentCacheForEntityId($entityId)
