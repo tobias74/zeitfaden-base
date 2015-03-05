@@ -163,11 +163,13 @@ abstract class AbstractZeitfadenController
     		}
     		else 
     		{
-	        $timeObjectHigh = new DateTime($datetimeHigh);
+	        $timeObjectHigh = new DateTime();
+          $timeObjectHigh->setTimestamp($datetimeHigh);
 	        $datetimeHigh = $timeObjectHigh->format('Y-m-d H:i:s');
 	        $criteriaHigh = new \VisitableSpecification\LessOrEqualCriteria('startDate',$datetimeHigh);
 	
-	        $timeObjectLow = new DateTime($datetimeLow);
+	        $timeObjectLow = new DateTime();
+          $timeObjectLow->setTimestamp($datetimeLow);
 	        $datetimeLow = $timeObjectLow->format('Y-m-d H:i:s');
 	        $criteriaLow = new \VisitableSpecification\GreaterOrEqualCriteria('startDate',$datetimeLow);
 	        
