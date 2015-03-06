@@ -241,7 +241,7 @@ abstract class AbstractZeitfadenController
     {
         //$criteria = new \VisitableSpecification\NotNullCriteria('fileId');
         //$criteria = new \VisitableSpecification\EqualCriteria('fileType','video/mpeg');
-        $criteria = new \VisitableSpecification\EqualCriteria('fileType','image/jpeg','station');
+        $criteria = new \VisitableSpecification\NotNullCriteria('fileType','station');
         $oldCriteria = $spec->getCriteria();
         if ($oldCriteria)
         {
@@ -396,7 +396,7 @@ abstract class AbstractZeitfadenController
 	$width = $this->_request->getParam('width',100);		
 	$height = $this->_request->getParam('height',100);		
     $serveAttachmentUrl = $this->getAttachmentUrlByRequest($this->_request);
-    $flyUrl = 'http://flyservice.zeitfaden.com/image/getFlyImageId/format/'.$format.'/imageSize/'.$imageSize.'/width/'.$width.'/height/'.$height.'?imageUrl='.$serveAttachmentUrl;
+    $flyUrl = 'http://flyservice.zeitfaden.com/image/getFlyImageId/timeToLive/31536000/format/'.$format.'/imageSize/'.$imageSize.'/width/'.$width.'/height/'.$height.'?imageUrl='.$serveAttachmentUrl;
     $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
