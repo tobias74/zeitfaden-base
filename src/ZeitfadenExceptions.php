@@ -10,6 +10,11 @@ class ZeitfadenNoMatchException extends Exception
   
 }
 
+class ZeitfadenNeedsLoginException extends Exception
+{
+  
+}
+
 class QueryException extends Exception
 {
   

@@ -242,11 +242,20 @@ class ZeitfadenApplication
         {
           $frontController->dispatch($request,$response);
         }
+        catch (ZeitfadenNeedsLoginException $e)
+        {
+          $response->enable();
+          $response->appendValue('status',$e->getCode());
+          $response->appendValue('errorMessage',$e->getMessage());
+          //$response->appendValue('stackTrace',$e->getTraceAsString());
+          $response->addHeader('X-Tobias: some');
+          $response->addHeader('HTTP/1.0 403 forbidden',true,403);
+        }
         catch (ZeitfadenNoMatchException $e)
         {
           $response->appendValue('error', ZeitfadenApplication::STATUS_ERROR_SOLE_NOT_FOUND);
           $response->appendValue('errorMessage',$e->getMessage());
-          $response->appendValue('stackTrace',$e->getTraceAsString());
+          //$response->appendValue('stackTrace',$e->getTraceAsString());
           $response->addHeader('X-Tobias: some');
           $response->addHeader('HTTP/1.0 404 Not Found',true,404);
           
