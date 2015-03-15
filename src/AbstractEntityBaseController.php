@@ -8,10 +8,6 @@ abstract class AbstractEntityBaseController extends AbstractZeitfadenController
 {
 
 
-  protected function getApplication()
-  {
-    return $this->_application;  
-  }
   
   
   public function demoAction()
@@ -331,10 +327,6 @@ abstract class AbstractEntityBaseController extends AbstractZeitfadenController
     }
   }
 
-  protected function getUserSession()
-  {
-    return $this->getApplication()->getUserSession();  
-  }
 
   public function getRequestParameter($name,$default)
   {
@@ -349,23 +341,6 @@ abstract class AbstractEntityBaseController extends AbstractZeitfadenController
   
     
 
-  public function getLoggedInUserId()
-  {
-    $userId = $this->getUserSession()->getLoggedInUserId();
-    if ($userId === '')
-    {
-      $userId = false;
-    }
-    
-    return $userId;
-  }
-  
-  
-  
-  protected function isUserLoggedIn()
-  {
-    return $this->getUserSession()->isUserLoggedIn();
-  }
 
 
 

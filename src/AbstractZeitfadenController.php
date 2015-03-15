@@ -14,6 +14,36 @@ abstract class AbstractZeitfadenController
     $this->_application = $application;
   }
 
+  protected function getUserSession()
+  {
+    return $this->getApplication()->getUserSession();  
+  }
+
+  public function getLoggedInUserId()
+  {
+    $userId = $this->getUserSession()->getLoggedInUserId();
+    if ($userId === '')
+    {
+      $userId = false;
+    }
+    
+    return $userId;
+  }
+  
+  
+  
+  protected function isUserLoggedIn()
+  {
+    return $this->getUserSession()->isUserLoggedIn();
+  }
+
+
+  protected function getApplication()
+  {
+    return $this->_application;  
+  }
+
+
   public function getProfiler()
   {
     return $this->profiler; 

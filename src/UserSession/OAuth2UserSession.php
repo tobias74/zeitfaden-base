@@ -11,14 +11,14 @@ class OAuth2UserSession extends AbstractUserSession
   
   
   
-  public function setOAuthApplicationId($val)
+  public function setOAuthAppId($val)
   {
-    $this->oAuthApplicationId = $val;
+    $this->oAuthAppId = $val;
   }
 
-  public function getOAuthApplicationId()
+  public function getOAuthAppId()
   {
-    return $this->oAuthApplicationId;
+    return $this->oAuthAppId;
   }
 
 }
