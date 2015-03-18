@@ -356,7 +356,15 @@ abstract class AbstractEntityBaseController extends AbstractZeitfadenController
     $r = new HttpRequest($flyUrl, HttpRequest::METH_GET);
     $r->send();
     $values = json_decode($r->getResponseBody(),true);
-    $this->sendGridFile($values);    
+    try
+    {
+      $this->sendGridFile($values);    
+    }
+    catch(\ErrorException $e)
+    {
+      echo "could not send file ".$flyUrl;
+      die();
+    }
   }
 
   public function getVideoAction()
